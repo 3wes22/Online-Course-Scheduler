@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DockWidget</class>
+ <widget class="QDockWidget" name="DockWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>570</width>
+    <height>579</height>
+   </rect>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>DockWidget</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QScrollArea" name="scrollArea">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>571</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>554</width>
+       <height>569</height>
+      </rect>
+     </property>
+     <widget class="QTextEdit" name="textEdit">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>281</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;M&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;ATH301&lt;/span&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;REGISTERED&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;&quot;&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; color:#151618; background-color:#ffffff;&quot;&gt;Section: 01 | Session: Session 01 | Subtype: LectureType: Course | Duration: 2/11/2024 - 5/28/2024Credits: 4.00 | Credit Type: ITCS Credit Courses8:30 AM - 10:29 AM TuesdayNile University, University Building 1, Floor GUB1, Room 139Instructor: Ahmed Essam Haggag&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>220</y>
+        <width>281</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;M&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;ATH301&lt;/span&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;REGISTERED&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;&quot;&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; color:#151618; background-color:#ffffff;&quot;&gt;Section: 01 | Session: Session 01 | Subtype: LectureType: Course | Duration: 2/11/2024 - 5/28/2024Credits: 4.00 | Credit Type: ITCS Credit Courses8:30 AM - 10:29 AM TuesdayNile University, University Building 1, Floor GUB1, Room 139Instructor: Ahmed Essam Haggag&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>450</y>
+        <width>281</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;M&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-size:18pt; font-weight:700; color:#00804d; background-color:#eaf7f2;&quot;&gt;ATH301&lt;/span&gt;&lt;a name=&quot;stsLbl_section_3_0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; font-weight:600; color:#00804d; background-color:#eaf7f2;&quot;&gt;&lt;br /&gt;REGISTERED&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;&quot;&gt;&lt;span style=&quot; font-family:'Open Sans','Helvetica','Arial','sans-serif'; color:#151618; background-color:#ffffff;&quot;&gt;Section: 01 | Session: Session 01 | Subtype: LectureType: Course | Duration: 2/11/2024 - 5/28/2024Credits: 4.00 | Credit Type: ITCS Credit Courses8:30 AM - 10:29 AM TuesdayNile University, University Building 1, Floor GUB1, Room 139Instructor: Ahmed Essam Haggag&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
