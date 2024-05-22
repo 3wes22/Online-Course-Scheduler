@@ -1,6 +1,7 @@
 import sys
+import json
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QMessageBox
+from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QMessageBox, QVBoxLayout, QWidget, QPushButton, QLabel
 from PyQt5.uic import loadUi
 
 class Login(QDialog):
@@ -14,18 +15,31 @@ class Login(QDialog):
     def loginfunction(self):
         email = self.email.text()
         password = self.password.text()
-        # Hardcoded credentials for validation
-        valid_email = "test@example.com"
-        valid_password = "password"
 
-        if email == valid_email and password == valid_password:
-            self.gotodummy()
-        else:
-            self.show_error_message("Wrong email or password")
+        # Load user credentials from JSON file
+        try:
+            with open("users.json", "r") as file:
+                data = json.load(file)
+                users = data["users"]
+        except FileNotFoundError:
+            self.show_error_message("users.json file not found")
+            return
+        except json.JSONDecodeError:
+            self.show_error_message("Error parsing users.json file")
+            return
 
-    def gotodummy(self):
-        dummy_page = DummyPage()
-        widget.addWidget(dummy_page)
+        # Check if entered credentials match any user in the file
+        for user in users:
+            if user["email"] == email and user["password"] == password:
+                self.gotocourses()
+                return
+
+        # If no match found, show error message
+        self.show_error_message("Wrong email or password")
+
+    def gotocourses(self):
+        courses_page = CoursesPage()
+        widget.addWidget(courses_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def gotocreate(self):
@@ -40,6 +54,9 @@ class Login(QDialog):
         msg.setWindowTitle("Error")
         msg.exec_()
 
+
+import json
+
 class CreateAcc(QDialog):
     def __init__(self):
         super(CreateAcc, self).__init__()
@@ -50,23 +67,116 @@ class CreateAcc(QDialog):
 
     def createaccfunction(self):
         email = self.email.text()
-        if self.password.text() == self.confirmpass.text():
-            password = self.password.text()
-            print(f"Successfully created account with email: {email} and password: {password}")
-            login = Login()
-            widget.addWidget(login)
-            widget.setCurrentIndex(widget.currentIndex() + 1)
-        else:
+        password = self.password.text()
+        confirm_password = self.confirmpass.text()
+
+        # Check if passwords match
+        if password != confirm_password:
             print("Passwords do not match!")
+            return
 
-class DummyPage(QDialog):
+        # Load existing user data from users.json
+        try:
+            with open("users.json", "r") as file:
+                users_data = json.load(file)
+        except FileNotFoundError:
+            users_data = {"users": []}
+
+        # Check if the email is already registered
+        for user in users_data["users"]:
+            if user["email"] == email:
+                print("Email already exists!")
+                return
+
+        # Add new user
+        new_user = {"email": email, "password": password}
+        users_data["users"].append(new_user)
+
+        # Save updated user data to users.json
+        with open("users.json", "w") as file:
+            json.dump(users_data, file)
+
+        print(f"Successfully created account with email: {email} and password: {password}")
+        login = Login()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+
+class CoursesPage(QDialog):
     def __init__(self):
-        super(DummyPage, self).__init__()
-        loadUi("dummy.ui", self)
-        self.logoutButton.clicked.connect(self.gotologin)
+        super(CoursesPage, self).__init__()
+        loadUi("courses.ui", self)
+        self.load_courses()
+        self.logoutButton.clicked.connect(self.logout)
 
-    def gotologin(self):
-        widget.setCurrentIndex(0)
+    def load_courses(self):
+        # Load courses from JSON file
+        try:
+            with open("courses.json", "r") as file:
+                data = json.load(file)
+                courses = data["courses"]
+        except FileNotFoundError:
+            self.show_error_message("courses.json file not found")
+            return
+        except json.JSONDecodeError:
+            self.show_error_message("Error parsing courses.json file")
+            return
+
+        layout = self.findChild(QVBoxLayout, "verticalLayout")
+
+        for course in courses:
+            course_widget = QWidget()
+            course_layout = QVBoxLayout(course_widget)
+            course_label = QLabel(f"Course: {course['name']}")
+            course_label.setStyleSheet("color: white; font-size: 18pt;")
+            course_layout.addWidget(course_label)
+
+            if course["registered"]:
+                registered_label = QLabel("REGISTERED")
+                registered_label.setStyleSheet("color: green; font-size: 14pt;")
+                course_layout.addWidget(registered_label)
+
+            details = [
+                f"Section: {course['section']} | Session: {course['session']} | Subtype: {course['subtype']}",
+                f"Type: {course['type']} | Duration: {course['duration']}",
+                f"Credits: {course['credits']} | Credit Type: {course['credit_type']}",
+                f"{course['time']}",
+                f"{course['location']}",
+                f"Instructor: {course['instructor']}"
+            ]
+
+            for detail in details:
+                detail_label = QLabel(detail)
+                detail_label.setStyleSheet("color: white;")
+                course_layout.addWidget(detail_label)
+
+            add_button = QPushButton("Add" if not course["registered"] else "Already Registered")
+            add_button.setEnabled(not course["registered"])
+            add_button.setStyleSheet(
+                "background-color: green; color: white;" if not course["registered"]
+                else "background-color: grey; color: white;"
+            )
+            if not course["registered"]:
+                add_button.clicked.connect(lambda _, cname=course["name"]: self.add_course(cname))
+            course_layout.addWidget(add_button)
+
+            layout.addWidget(course_widget)
+            course_widget.setLayout(course_layout)
+
+    def logout(self):
+        login_page = Login()
+        widget.addWidget(login_page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+    def add_course(self, course_name):
+        print(f"Adding course: {course_name}")
+
+    def show_error_message(self, message):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(message)
+        msg.setWindowTitle("Error")
+        msg.exec_()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
