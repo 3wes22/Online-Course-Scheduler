@@ -24,6 +24,10 @@
         {
             "student_id": 9,
             "course_ids": []
+        },
+        {
+            "student_id": 10,
+            "course_ids": []
         }
     ]
 }

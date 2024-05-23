@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1138</width>
+    <height>850</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Courses</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(54, 54, 54);</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>211</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size: 30px;
+                    font: bold;
+                    color: rgb(255, 222, 222);
+                    color: rgb(255, 151, 151);</string>
+   </property>
+   <property name="text">
+    <string>Schedule</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>50</y>
+     <width>761</width>
+     <height>431</height>
+    </rect>
+   </property>
+   <row>
+    <property name="text">
+     <string>7:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>8:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>9:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>10:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>11:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>12:00 AM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>1:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>2:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>3:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>4:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>6:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>7:00 PM</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>8:00 PM</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Sunday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Monday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Tuesday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Wednesday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Thursday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Friday</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Saturday</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="logoutButton">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>10</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

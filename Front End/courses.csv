@@ -1,55 +1,16 @@
-course_id,course_name,section,session,subtype,type,duration,credits,credit_type,time,location,instructor
-1,Introduction to Programming,A,Spring,Lecture,Core,1 semester,3,Core,MWF 9-10 AM,Room 101,Dr. Smith
-2,Data Structures,B,Fall,Lecture,Core,1 semester,3,Core,MWF 11-12 AM,Room 102,Prof. Johnson
-3,Database Systems,A,Spring,Lecture,Core,1 semester,3,Core,TT 2-3:30 PM,Room 103,Dr. Brown
-4,Algorithms,C,Spring,Lecture,Core,1 semester,3,Core,TT 11-12:30 PM,Room 104,Dr. Lee
-5,Operating Systems,A,Fall,Lecture,Core,1 semester,3,Core,MWF 1-2 PM,Room 105,Dr. Taylor
-6,Networks,B,Spring,Lecture,Core,1 semester,3,Core,MWF 3-4 PM,Room 106,Dr. Patel
-7,Artificial Intelligence,C,Fall,Lecture,Elective,1 semester,3,Elective,TT 9-10:30 AM,Room 107,Dr. Kim
-8,Machine Learning,A,Spring,Lecture,Elective,1 semester,3,Elective,MWF 2-3 PM,Room 108,Prof. Wilson
-9,Computer Graphics,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 1-2:30 PM,Room 109,Dr. Anderson
-10,Human-Computer Interaction,C,Spring,Lecture,Elective,1 semester,3,Elective,MWF 10-11 AM,Room 110,Prof. White
-11,Software Engineering,A,Fall,Lecture,Core,1 semester,3,Core,MWF 12-1 PM,Room 111,Dr. Moore
-12,Databases II,B,Spring,Lecture,Core,1 semester,3,Core,TT 3-4:30 PM,Room 112,Dr. Brown
-13,Cybersecurity,C,Fall,Lecture,Elective,1 semester,3,Elective,MWF 8-9 AM,Room 113,Dr. Martinez
-14,Embedded Systems,A,Spring,Lecture,Core,1 semester,3,Core,TT 5-6:30 PM,Room 114,Prof. Clark
-15,Mobile App Development,B,Fall,Lecture,Elective,1 semester,3,Elective,MWF 4-5 PM,Room 115,Dr. Rodriguez
-16,Big Data,C,Spring,Lecture,Elective,1 semester,3,Elective,MWF 11-12 PM,Room 116,Prof. Lewis
-17,Cloud Computing,A,Fall,Lecture,Elective,1 semester,3,Elective,TT 7-8:30 AM,Room 117,Dr. Lee
-18,Quantum Computing,B,Spring,Lecture,Elective,1 semester,3,Elective,MWF 6-7 PM,Room 118,Dr. Lopez
-19,Bioinformatics,C,Fall,Lecture,Elective,1 semester,3,Elective,TT 2-3:30 PM,Room 119,Prof. Hill
-20,Computational Theory,A,Spring,Lecture,Core,1 semester,3,Core,MWF 5-6 PM,Room 120,Dr. Scott
-21,Parallel Computing,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 11-12:30 PM,Room 121,Dr. King
-22,Distributed Systems,C,Spring,Lecture,Core,1 semester,3,Core,MWF 7-8 AM,Room 122,Prof. Green
-23,Information Retrieval,A,Fall,Lecture,Elective,1 semester,3,Elective,TT 3-4:30 PM,Room 123,Dr. Adams
-24,Computer Vision,B,Spring,Lecture,Elective,1 semester,3,Elective,MWF 9-10 AM,Room 124,Dr. Baker
-25,Natural Language Processing,C,Fall,Lecture,Elective,1 semester,3,Elective,TT 1-2:30 PM,Room 125,Prof. Carter
-26,Game Development,A,Spring,Lecture,Elective,1 semester,3,Elective,MWF 11-12 PM,Room 126,Dr. Phillips
-27,Augmented Reality,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 5-6:30 PM,Room 127,Dr. Evans
-28,Robotics,C,Spring,Lecture,Elective,1 semester,3,Elective,MWF 8-9 AM,Room 128,Prof. Collins
-29,IoT Systems,A,Fall,Lecture,Elective,1 semester,3,Elective,TT 4-5:30 PM,Room 129,Dr. Stewart
-30,Ethical Hacking,B,Spring,Lecture,Elective,1 semester,3,Elective,MWF 10-11 AM,Room 130,Prof. Sanchez
-31,Virtual Reality,C,Fall,Lecture,Elective,1 semester,3,Elective,TT 7-8:30 PM,Room 131,Dr. Morris
-32,Social Computing,A,Spring,Lecture,Elective,1 semester,3,Elective,MWF 6-7 PM,Room 132,Prof. Rogers
-33,Digital Forensics,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 11-12:30 PM,Room 133,Dr. Reed
-34,Neural Networks,C,Spring,Lecture,Elective,1 semester,3,Elective,MWF 9-10 AM,Room 134,Prof. Cook
-35,Theory of Computation,A,Fall,Lecture,Core,1 semester,3,Core,TT 1-2:30 PM,Room 135,Dr. Morgan
-36,Software Architecture,B,Spring,Lecture,Core,1 semester,3,Core,MWF 8-9 AM,Room 136,Dr. Bell
-37,Information Security,C,Fall,Lecture,Core,1 semester,3,Core,TT 3-4:30 PM,Room 137,Prof. Murphy
-38,Microprocessors,A,Spring,Lecture,Core,1 semester,3,Core,MWF 11-12 PM,Room 138,Dr. Bailey
-39,Data Mining,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 5-6:30 PM,Room 139,Prof. Rivera
-40,Software Testing,C,Spring,Lecture,Core,1 semester,3,Core,MWF 10-11 AM,Room 140,Dr. Cooper
-41,Computer Architecture,A,Fall,Lecture,Core,1 semester,3,Core,TT 2-3:30 PM,Room 141,Prof. Richardson
-42,Advanced Algorithms,B,Spring,Lecture,Elective,1 semester,3,Elective,MWF 12-1 PM,Room 142,Dr. Cox
-43,Programming Languages,C,Fall,Lecture,Core,1 semester,3,Core,TT 4-5:30 PM,Room 143,Dr. Howard
-44,Mobile Security,A,Spring,Lecture,Elective,1 semester,3,Elective,MWF 3-4 PM,Room 144,Prof. Ward
-45,Blockchain Technology,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 9-10:30 AM,Room 145,Dr. Torres
-46,Software Project Management,C,Spring,Lecture,Core,1 semester,3,Core,MWF 11-12 PM,Room 146,Dr. Peterson
-47,Human-AI Interaction,A,Fall,Lecture,Elective,1 semester,3,Elective,TT 5-6:30 PM,Room 147,Prof. Gray
-48,Computational Biology,B,Spring,Lecture,Elective,1 semester,3,Elective,MWF 4-5 PM,Room 148,Dr. Ramirez
-49,Cryptography,C,Fall,Lecture,Core,1 semester,3,Core,TT 11-12:30 PM,Room 149,Prof. James
-50,Data Visualization,A,Spring,Lecture,Elective,1 semester,3,Elective,MWF 7-8 AM,Room 150,Dr. Hughes
-51,Introduction to Bioinformatics,B,Fall,Lecture,Elective,1 semester,3,Elective,TT 3-4:30 PM,Room 151,Prof. Perry
-52,Advanced Data Structures,C,Spring,Lecture,Core,1 semester,3,Core,MWF 9-10 AM,Room 152,Dr. Simmons
-53,Computer-Aided Design,A,Fall,Lecture,Elective,1 semester,3,Elective,TT 1-2:30 PM,Room 153,Prof. Foster
-
+course_id,course_name,section,session,subtype,type,"duration""h""",credits,credit_type,time,days,location,instructor
+1,Introduction to Programming,A,Spring,Lecture,Core,2 ,3,Core,MWF 9-11 AM,MWF,Room 101,Dr. Smith
+2,Data Structures,B,Fall,Lecture,Core,2 ,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
+3,Database Systems,A,Spring,Lecture,Core,2 ,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
+4,Introduction to Programming,A,Spring,Lecture,Core,2 ,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
+5,Data Structures,B,Fall,Lecture,Core,2 ,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
+6,Database Systems,A,Spring,Lecture,Core,2 ,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
+7,Introduction to Programming,A,Spring,Lecture,Core,1,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
+8,Data Structures,B,Fall,Lecture,Core,1,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
+9,Database Systems,A,Spring,Lecture,Core,1,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
+10,Introduction to Programming,A,Spring,Lecture,Core,1,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
+11,Data Structures,B,Fall,Lecture,Core,3,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
+12,Database Systems,A,Spring,Lecture,Core,3,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
+13,Introduction to Programming,A,Spring,Lecture,Core,3,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
+14,Data Structures,B,Fall,Lecture,Core,3,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
+15,Database Systems,A,Spring,Lecture,Core,3,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
