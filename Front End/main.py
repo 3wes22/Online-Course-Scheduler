@@ -1,4 +1,5 @@
 import sys
+import csv
 import json
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QMessageBox, QVBoxLayout, QWidget, QPushButton, QLabel
@@ -31,20 +32,20 @@ class Login(QDialog):
         # Check if entered credentials match any user in the file
         for user in users:
             if user["email"] == email and user["password"] == password:
-                self.gotocourses()
+                self.goto_dashboard(user["id"])  # Pass user ID to the dashboard
                 return
 
         # If no match found, show error message
         self.show_error_message("Wrong email or password")
 
-    def gotocourses(self):
-        courses_page = CoursesPage()
-        widget.addWidget(courses_page)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
     def gotocreate(self):
         createacc = CreateAcc()
         widget.addWidget(createacc)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def goto_dashboard(self, user_id):
+        dashboard = Dashboard(user_id)
+        widget.addWidget(dashboard)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def show_error_message(self, message):
@@ -54,10 +55,23 @@ class Login(QDialog):
         msg.setWindowTitle("Error")
         msg.exec_()
 
+class Dashboard(QDialog):
+    def __init__(self, user_id):
+        super(Dashboard, self).__init__()
+        self.user_id = user_id
+        loadUi("dashboard.ui", self)
+        self.my_schedule.clicked.connect(self.goto_schedule)
+        self.courses.clicked.connect(self.goto_courses)
 
-import json
+    def goto_schedule(self):
+        schedule_page = SchedulePage()
+        widget.addWidget(schedule_page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
-import json
+    def goto_courses(self):
+        courses_page = CoursesPage(self.user_id)
+        widget.addWidget(courses_page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 class CreateAcc(QDialog):
     def __init__(self):
@@ -90,12 +104,25 @@ class CreateAcc(QDialog):
                 self.status_label.setText("User is already taken")
                 return
 
-        # Add new user
-        users_data["users"].append({"email": email, "password": password})
+        # Add new user with a unique ID
+        new_id = max((user["id"] for user in users_data["users"]), default=0) + 1
+        users_data["users"].append({"id": new_id, "email": email, "password": password})
 
         # Save updated user data to users.json
         with open("users.json", "w") as file:
             json.dump(users_data, file, indent=4)
+
+        # Add new user to enrollments.json
+        try:
+            with open("enrollments.json", "r") as file:
+                enrollments_data = json.load(file)
+        except FileNotFoundError:
+            enrollments_data = {"users": []}
+
+        enrollments_data["users"].append({"student_id": new_id, "course_ids": []})
+
+        with open("enrollments.json", "w") as file:
+            json.dump(enrollments_data, file, indent=4)
 
         self.status_label.setText(f"Successfully created account with email: {email}")
         login = Login()
@@ -103,23 +130,41 @@ class CreateAcc(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 class CoursesPage(QDialog):
-    def __init__(self):
+    def __init__(self, user_id):
         super(CoursesPage, self).__init__()
+        self.user_id = user_id
         loadUi("courses.ui", self)
         self.load_courses()
         self.logoutButton.clicked.connect(self.logout)
 
     def load_courses(self):
-        # Load courses from JSON file
+        # Load enrollments from JSON file
         try:
-            with open("courses.json", "r") as file:
-                data = json.load(file)
-                courses = data["courses"]
+            with open("enrollments.json", "r") as file:
+                enrollments_data = json.load(file)["users"]
         except FileNotFoundError:
-            self.show_error_message("courses.json file not found")
+            self.show_error_message("enrollments.json file not found")
             return
         except json.JSONDecodeError:
-            self.show_error_message("Error parsing courses.json file")
+            self.show_error_message("Error parsing enrollments.json file")
+            return
+
+        # Find the courses registered by the current user
+        registered_courses = set()
+        for enrollment in enrollments_data:
+            if enrollment["student_id"] == self.user_id:
+                registered_courses.update(enrollment["course_ids"])
+
+        # Load courses from CSV file
+        try:
+            with open("courses.csv", "r") as file:
+                reader = csv.DictReader(file)
+                courses = list(reader)
+        except FileNotFoundError:
+            self.show_error_message("courses.csv file not found")
+            return
+        except csv.Error:
+            self.show_error_message("Error parsing courses.csv file")
             return
 
         layout = self.findChild(QVBoxLayout, "verticalLayout")
@@ -127,37 +172,34 @@ class CoursesPage(QDialog):
         for course in courses:
             course_widget = QWidget()
             course_layout = QVBoxLayout(course_widget)
-            course_label = QLabel(f"Course: {course['name']}")
+            course_label = QLabel(f"Course: {course['course_name']}")
             course_label.setStyleSheet("color: white; font-size: 18pt;")
             course_layout.addWidget(course_label)
 
-            if course["registered"]:
-                registered_label = QLabel("REGISTERED")
-                registered_label.setStyleSheet("color: green; font-size: 14pt;")
-                course_layout.addWidget(registered_label)
-
-            details = [
+            course_details = [
                 f"Section: {course['section']} | Session: {course['session']} | Subtype: {course['subtype']}",
                 f"Type: {course['type']} | Duration: {course['duration']}",
                 f"Credits: {course['credits']} | Credit Type: {course['credit_type']}",
-                f"{course['time']}",
-                f"{course['location']}",
+                f"Time: {course['time']}",
+                f"Location: {course['location']}",
                 f"Instructor: {course['instructor']}"
             ]
 
-            for detail in details:
+            for detail in course_details:
                 detail_label = QLabel(detail)
                 detail_label.setStyleSheet("color: white;")
                 course_layout.addWidget(detail_label)
 
-            add_button = QPushButton("Add" if not course["registered"] else "Already Registered")
-            add_button.setEnabled(not course["registered"])
-            add_button.setStyleSheet(
-                "background-color: green; color: white;" if not course["registered"]
-                else "background-color: grey; color: white;"
-            )
-            if not course["registered"]:
-                add_button.clicked.connect(lambda _, cname=course["name"]: self.add_course(cname))
+            add_button = QPushButton("Add")
+            add_button.setEnabled(True)
+            add_button.setStyleSheet("background-color: green; color: white;")
+
+            if int(course['course_id']) in registered_courses:
+                add_button.setEnabled(False)
+                add_button.setText("Already Registered")
+                add_button.setStyleSheet("background-color: grey; color: white;")
+
+            add_button.clicked.connect(lambda _, cname=course["course_name"]: self.add_course(cname))
             course_layout.addWidget(add_button)
 
             layout.addWidget(course_widget)
@@ -167,6 +209,7 @@ class CoursesPage(QDialog):
         login_page = Login()
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def add_course(self, course_name):
         print(f"Adding course: {course_name}")
 

@@ -1,0 +1,29 @@
+{
+    "users": [
+        {
+            "student_id": 1,
+            "course_ids": [
+                1,
+                2
+            ]
+        },
+        {
+            "student_id": 2,
+            "course_ids": [
+                2,
+                3
+            ]
+        },
+        {
+            "student_id": 3,
+            "course_ids": [
+                1,
+                3
+            ]
+        },
+        {
+            "student_id": 9,
+            "course_ids": []
+        }
+    ]
+}

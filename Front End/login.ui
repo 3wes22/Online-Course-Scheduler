@@ -128,9 +128,9 @@
   <widget class="QPushButton" name="createaccbutton">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>350</y>
-     <width>93</width>
+     <x>332</x>
+     <y>340</y>
+     <width>111</width>
      <height>28</height>
     </rect>
    </property>
