@@ -1,4 +1,4 @@
-course_id,course_name,section,session,subtype,type,"duration""h""",credits,credit_type,time,days,location,instructor
+course_id,course_name,section,session,subtype,type,duration,credits,credit_type,time,days,location,instructor
 1,Introduction to Programming,A,Spring,Lecture,Core,2 ,3,Core,MWF 9-11 AM,MWF,Room 101,Dr. Smith
 2,Data Structures,B,Fall,Lecture,Core,2 ,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
 3,Database Systems,A,Spring,Lecture,Core,2 ,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown

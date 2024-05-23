@@ -64,6 +64,22 @@
                 <string>Courses</string>
             </property>
         </widget>
+        <widget class="QPushButton" name="logoutButton">
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>121</width>
+                    <height>41</height>
+                </rect>
+            </property>
+            <property name="styleSheet">
+                <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+            </property>
+            <property name="text">
+                <string>Logout</string>
+            </property>
+        </widget>
     </widget>
     <resources/>
     <connections/>

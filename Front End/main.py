@@ -163,6 +163,7 @@ class Dashboard(QDialog):
         loadUi("dashboard.ui", self)
         self.my_schedule.clicked.connect(self.goto_schedule)
         self.courses.clicked.connect(self.goto_courses)
+        self.logoutButton.clicked.connect(self.goto_login)  # Connect the logout button to the slot
 
     def goto_schedule(self):
         schedule_page = SchedulePage(self.user_id)
@@ -174,6 +175,12 @@ class Dashboard(QDialog):
         widget.addWidget(courses_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+    def goto_login(self):
+        login_page = Login()
+        widget.addWidget(login_page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
 class CoursesPage(QDialog):
     def __init__(self, user_id):
         super(CoursesPage, self).__init__()
@@ -181,6 +188,7 @@ class CoursesPage(QDialog):
         loadUi("courses.ui", self)
         self.load_courses()
         self.logoutButton.clicked.connect(self.logout)
+        self.backButton.clicked.connect(self.goto_dashboard)  # Connect the back button to the slot
 
     def load_courses(self):
         # Load enrollments from JSON file
@@ -265,11 +273,18 @@ class CoursesPage(QDialog):
         msg.setWindowTitle("Error")
         msg.exec_()
 
+    def goto_dashboard(self):
+        dashboard = Dashboard(self.user_id)
+        widget.addWidget(dashboard)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
 class CreateAcc(QDialog):
     def __init__(self):
         super(CreateAcc, self).__init__()
         loadUi("createacc.ui", self)
         self.signupbutton.clicked.connect(self.createaccfunction)
+        self.backButton.clicked.connect(self.goto_login)  # Connect the back button to the slot
         self.password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.confirmpass.setEchoMode(QtWidgets.QLineEdit.Password)
 
@@ -320,6 +335,12 @@ class CreateAcc(QDialog):
         login = Login()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def goto_login(self):
+        login_page = Login()
+        widget.addWidget(login_page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
 
 
 
