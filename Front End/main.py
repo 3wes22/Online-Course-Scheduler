@@ -57,6 +57,8 @@ class Login(QDialog):
 
 import json
 
+import json
+
 class CreateAcc(QDialog):
     def __init__(self):
         super(CreateAcc, self).__init__()
@@ -70,9 +72,9 @@ class CreateAcc(QDialog):
         password = self.password.text()
         confirm_password = self.confirmpass.text()
 
-        # Check if passwords match
+        # Check if confirm password matches password
         if password != confirm_password:
-            print("Passwords do not match!")
+            self.status_label.setText("Enter the same password in confirmation field")
             return
 
         # Load existing user data from users.json
@@ -82,26 +84,23 @@ class CreateAcc(QDialog):
         except FileNotFoundError:
             users_data = {"users": []}
 
-        # Check if the email is already registered
+        # Check if the user already exists
         for user in users_data["users"]:
             if user["email"] == email:
-                print("Email already exists!")
+                self.status_label.setText("User is already taken")
                 return
 
         # Add new user
-        new_user = {"email": email, "password": password}
-        users_data["users"].append(new_user)
+        users_data["users"].append({"email": email, "password": password})
 
         # Save updated user data to users.json
         with open("users.json", "w") as file:
-            json.dump(users_data, file)
+            json.dump(users_data, file, indent=4)
 
-        print(f"Successfully created account with email: {email} and password: {password}")
+        self.status_label.setText(f"Successfully created account with email: {email}")
         login = Login()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex() + 1)
-
-
 
 class CoursesPage(QDialog):
     def __init__(self):
