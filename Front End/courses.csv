@@ -1,16 +1,21 @@
-course_id,course_name,section,session,subtype,type,duration,credits,credit_type,time,days,location,instructor
-1,Introduction to Programming,A,Spring,Lecture,Core,2 ,3,Core,MWF 9-11 AM,MWF,Room 101,Dr. Smith
-2,Data Structures,B,Fall,Lecture,Core,2 ,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
-3,Database Systems,A,Spring,Lecture,Core,2 ,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
-4,Introduction to Programming,A,Spring,Lecture,Core,2 ,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
-5,Data Structures,B,Fall,Lecture,Core,2 ,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
-6,Database Systems,A,Spring,Lecture,Core,2 ,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
-7,Introduction to Programming,A,Spring,Lecture,Core,1,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
-8,Data Structures,B,Fall,Lecture,Core,1,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
-9,Database Systems,A,Spring,Lecture,Core,1,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
-10,Introduction to Programming,A,Spring,Lecture,Core,1,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
-11,Data Structures,B,Fall,Lecture,Core,3,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
-12,Database Systems,A,Spring,Lecture,Core,3,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
-13,Introduction to Programming,A,Spring,Lecture,Core,3,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith
-14,Data Structures,B,Fall,Lecture,Core,3,3,Core,MWF 11-12 AM,MWF,Room 102,Prof. Johnson
-15,Database Systems,A,Spring,Lecture,Core,3,3,Core,TT 2-3:30 PM,TT,Room 103,Dr. Brown
+course_id,course_code,course_name,section,session,subtype,type,duration,credits,credit_type,time,days,location,instructor,prerequisite
+1,engl01,English 101,A,Spring,Lecture,Core,2,3,Core,MWF 9-10 AM,MWF,Room 101,Dr. Smith,
+2,engl02,English 102,A,Fall,Lecture,Core,2,3,Core,MWF 10-11 AM,MWF,Room 102,Prof. Johnson,engl01
+3,engl03,English 103,A,Spring,Lecture,Core,2,3,Core,MWF 11-12 AM,MWF,Room 103,Dr. Brown,engl02
+4,engl04,English 104,A,Fall,Lecture,Core,2,3,Core,MWF 1-2 PM,MWF,Room 104,Dr. White,engl03
+5,engl05,English 105,A,Spring,Lecture,Core,2,3,Core,MWF 2-3 PM,MWF,Room 105,Dr. Green,engl04
+6,math01,Math 101,A,Fall,Lecture,Core,2,3,Core,TT 9-10:30 AM,TT,Room 201,Dr. Black,
+7,math02,Math 102,A,Spring,Lecture,Core,2,3,Core,TT 10:30-12 PM,TT,Room 202,Prof. Grey,math01
+8,math03,Math 103,A,Fall,Lecture,Core,2,3,Core,TT 1-2:30 PM,TT,Room 203,Dr. Pink,math02
+9,math04,Math 104,A,Spring,Lecture,Core,2,3,Core,TT 2:30-4 PM,TT,Room 204,Dr. Blue,math03
+10,math05,Math 105,A,Fall,Lecture,Core,2,3,Core,TT 4-5:30 PM,TT,Room 205,Dr. Red,math04
+11,cs01,Introduction to Programming,A,Spring,Lecture,Core,2,3,Core,MWF 9-11 AM,MWF,Room 301,Dr. Violet,
+12,cs02,Data Structures,A,Fall,Lecture,Core,2,3,Core,MWF 11-12 AM,MWF,Room 302,Prof. Indigo,cs01
+13,cs03,Database Systems,A,Spring,Lecture,Core,2,3,Core,TT 2-3:30 PM,TT,Room 303,Dr. Cyan,cs02
+14,cs04,Algorithms,A,Fall,Lecture,Core,2,3,Core,TT 9-10:30 AM,TT,Room 304,Dr. Magenta,cs03
+15,cs05,Operating Systems,A,Spring,Lecture,Core,2,3,Core,TT 10:30-12 PM,TT,Room 305,Dr. Yellow,cs04
+16,bio01,Biology 101,A,Fall,Lecture,Core,2,3,Core,MWF 9-10 AM,MWF,Room 401,Dr. Moss,
+17,bio02,Biology 102,A,Spring,Lecture,Core,2,3,Core,MWF 10-11 AM,MWF,Room 402,Prof. Fern,bio01
+18,bio03,Biology 103,A,Fall,Lecture,Core,2,3,Core,MWF 11-12 AM,MWF,Room 403,Dr. Pine,bio02
+19,bio04,Biology 104,A,Spring,Lecture,Core,2,3,Core,MWF 1-2 PM,MWF,Room 404,Dr. Maple,bio03
+20,bio05,Biology 105,A,Fall,Lecture,Core,2,3,Core,MWF 2-3 PM,MWF,Room 405,Dr. Oak,bio04
