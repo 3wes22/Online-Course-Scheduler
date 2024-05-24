@@ -1,86 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>Dialog</class>
-    <widget class="QDialog" name="Dialog">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>500</width>
-                <height>640</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Dialog</string>
-        </property>
-        <property name="styleSheet">
-            <string notr="true">background-color: rgb(54, 54, 54);</string>
-        </property>
-        <widget class="QLabel" name="label">
-            <property name="geometry">
-                <rect>
-                    <x>160</x>
-                    <y>50</y>
-                    <width>171</width>
-                    <height>71</height>
-                </rect>
-            </property>
-            <property name="styleSheet">
-                <string notr="true">color:rgb(225, 225, 225); font-size:28pt;</string>
-            </property>
-            <property name="text">
-                <string>Dashboard</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" name="my_schedule">
-            <property name="geometry">
-                <rect>
-                    <x>180</x>
-                    <y>200</y>
-                    <width>141</width>
-                    <height>41</height>
-                </rect>
-            </property>
-            <property name="styleSheet">
-                <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
-            </property>
-            <property name="text">
-                <string>My Schedule</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" name="courses">
-            <property name="geometry">
-                <rect>
-                    <x>180</x>
-                    <y>300</y>
-                    <width>141</width>
-                    <height>41</height>
-                </rect>
-            </property>
-            <property name="styleSheet">
-                <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
-            </property>
-            <property name="text">
-                <string>Courses</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" name="logoutButton">
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>121</width>
-                    <height>41</height>
-                </rect>
-            </property>
-            <property name="styleSheet">
-                <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
-            </property>
-            <property name="text">
-                <string>Logout</string>
-            </property>
-        </widget>
-    </widget>
-    <resources/>
-    <connections/>
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(54, 54, 54);</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>50</y>
+     <width>171</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(225, 225, 225); font-size:28pt;</string>
+   </property>
+   <property name="text">
+    <string>Dashboard</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="my_schedule">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>200</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>My Schedule</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="courses">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>300</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Courses</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="logoutButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

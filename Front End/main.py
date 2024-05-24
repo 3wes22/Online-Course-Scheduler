@@ -284,7 +284,7 @@ class CoursesPage(QDialog):
             QMessageBox.warning(self, "Add Course", "Prerequisite course not met. You cannot add this course.")
             return
 
-        # Perform topological sort using Kahn's Algorithm
+        # Perform topological Algorithm
         topo_order = []
         zero_in_degree_queue = deque([course for course in prerequisite_graph if in_degree[course] == 0])
 
