@@ -80,7 +80,7 @@ class SchedulePage(QDialog):
         registered_courses = set()
         for enrollment in enrollments_data:
             if enrollment["student_id"] == self.user_id:
-                registered_courses.update(enrollment.get("current_courses", []))
+                registered_courses.update(map(int, enrollment.get("current_courses", [])))
 
         try:
             with open("courses.csv", "r") as file:
@@ -240,7 +240,7 @@ class CoursesPage(QDialog):
             else:
                 prerequisite_code = course["prerequisite"]
                 prerequisite_id = course_code_to_id.get(prerequisite_code)
-                add_button.clicked.connect(lambda _, cid=course_id, prereq=prerequisite_id: self.add_course(cid, prereq))
+                add_button.clicked.connect(lambda _, cid=course_id, prereq=prerequisite_id, c_time=course['time'], c_days=course['days']: self.add_course(cid, prereq, c_time, c_days))
 
             course_layout.addWidget(add_button)
 
@@ -252,7 +252,7 @@ class CoursesPage(QDialog):
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def add_course(self, course_id, prerequisite_id):
+    def add_course(self, course_id, prerequisite_id, course_time, course_days):
         try:
             with open("enrollments.json", "r") as file:
                 enrollments_data = json.load(file)
@@ -268,8 +268,14 @@ class CoursesPage(QDialog):
                 current_courses = user.get("current_courses", [])
 
                 if prerequisite_id and prerequisite_id not in completed_courses:
-                    QMessageBox.warning(self, "Add Course", f"Prerequisite course not met. You cannot add this course.")
+                    QMessageBox.warning(self, "Add Course", "Prerequisite course not met. You cannot add this course.")
                     return
+
+                # Check for time conflicts with current courses
+                if self.has_time_conflict(current_courses, course_time, course_days):
+                    QMessageBox.warning(self, "Add Course", "Time conflict detected. You cannot enroll in this course.")
+                    return
+
                 if course_id not in current_courses:
                     user["current_courses"].append(course_id)
                     QMessageBox.information(self, "Add Course", f"Course {course_id} added to your schedule")
@@ -281,6 +287,54 @@ class CoursesPage(QDialog):
 
         # Refresh the page to update the course status
         self.load_courses()
+
+    def has_time_conflict(self, current_courses, new_course_time, new_course_days):
+        try:
+            with open("courses.csv", "r") as file:
+                reader = csv.DictReader(file)
+                courses = {int(course['course_id']): course for course in reader}
+        except FileNotFoundError:
+            self.show_error_message("courses.csv file not found")
+            return False
+        except csv.Error:
+            self.show_error_message("Error parsing courses.csv file")
+            return False
+
+        new_time_slots = self.get_time_slots(new_course_time)
+        new_day_indices = self.get_day_indices(new_course_days)
+
+        for course_id in current_courses:
+            course = courses.get(course_id)
+            if course:
+                current_time_slots = self.get_time_slots(course['time'])
+                current_day_indices = self.get_day_indices(course['days'])
+
+                # Check if any time slots overlap
+                if set(new_time_slots).intersection(current_time_slots) and set(new_day_indices).intersection(current_day_indices):
+                    return True
+
+        return False
+
+    def get_time_slots(self, time_str):
+        time_mapping = {
+            "MWF 9-11 AM": [2, 3, 4],
+            "MWF 9-10 AM": [2, 3],
+            "MWF 11-12 AM": [4, 5],
+            "TT 2-3:30 PM": [7, 8],
+        }
+        return time_mapping.get(time_str, [])
+
+    def get_day_indices(self, day_str):
+        day_mapping = {
+            "M": [1],
+            "T": [2],
+            "W": [3],
+            "R": [4],
+            "F": [5],
+            "MWF": [1, 3, 5],
+            "TT": [2, 4],
+        }
+        return day_mapping.get(day_str, [])
 
     def show_error_message(self, message):
         msg = QMessageBox()
@@ -294,53 +348,59 @@ class CoursesPage(QDialog):
         widget.addWidget(dashboard)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+class CreateAcc(QDialog):
+    def __init__(self):
+        super(CreateAcc, self).__init__()
+        loadUi("createacc.ui", self)
+        self.signupbutton.clicked.connect(self.createaccfunction)
+        self.backtologinbutton.clicked.connect(self.backto_login)
 
+    def createaccfunction(self):
+        email = self.email.text()
+        password = self.password.text()
+        confirm_password = self.confirmpass.text()
 
-
-
-def createaccfunction(self):
-    email = self.email.text()
-    password = self.password.text()
-    confirm_password = self.confirmpass.text()
-
-    if password != confirm_password:
-        self.status_label.setText("Enter the same password in confirmation field")
-        return
-
-    try:
-        with open("users.json", "r") as file:
-            users_data = json.load(file)
-    except FileNotFoundError:
-        users_data = {"users": []}
-
-    for user in users_data["users"]:
-        if user["email"] == email:
-            self.status_label.setText("User is already taken")
+        if password != confirm_password:
+            self.status_label.setText("Enter the same password in confirmation field")
             return
 
-    new_id = max((user["id"] for user in users_data["users"]), default=0) + 1
-    users_data["users"].append({"id": new_id, "email": email, "password": password})
+        try:
+            with open("users.json", "r") as file:
+                users_data = json.load(file)
+        except FileNotFoundError:
+            users_data = {"users": []}
 
-    with open("users.json", "w") as file:
-        json.dump(users_data, file, indent=4)
+        for user in users_data["users"]:
+            if user["email"] == email:
+                self.status_label.setText("User is already taken")
+                return
 
-    try:
-        with open("enrollments.json", "r") as file:
-            enrollments_data = json.load(file)
-    except FileNotFoundError:
-        enrollments_data = {"users": []}
+        new_id = max((user["id"] for user in users_data["users"]), default=0) + 1
+        users_data["users"].append({"id": new_id, "email": email, "password": password})
 
-    enrollments_data["users"].append({"student_id": new_id, "completed_courses": [], "current_courses": []})
+        with open("users.json", "w") as file:
+            json.dump(users_data, file, indent=4)
 
-    with open("enrollments.json", "w") as file:
-        json.dump(enrollments_data, file, indent=4)
+        try:
+            with open("enrollments.json", "r") as file:
+                enrollments_data = json.load(file)
+        except FileNotFoundError:
+            enrollments_data = {"users": []}
 
-    self.status_label.setText(f"Successfully created account with email: {email}")
-    login = Login()
-    widget.addWidget(login)
-    widget.setCurrentIndex(widget.currentIndex() + 1)
+        enrollments_data["users"].append({"student_id": new_id, "completed_courses": [], "current_courses": []})
 
+        with open("enrollments.json", "w") as file:
+            json.dump(enrollments_data, file, indent=4)
 
+        self.status_label.setText(f"Successfully created account with email: {email}")
+        login = Login()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def backto_login(self):
+        login = Login()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 app = QApplication(sys.argv)
 widget = QStackedWidget()
