@@ -2,7 +2,10 @@ import sys
 import csv
 import json
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QMessageBox, QVBoxLayout, QWidget, QPushButton, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import (
+    QDialog, QApplication, QStackedWidget, QMessageBox, QVBoxLayout, QWidget,
+    QPushButton, QLabel, QTableWidget, QTableWidgetItem
+)
 from PyQt5.uic import loadUi
 from collections import defaultdict, deque
 
@@ -199,8 +202,8 @@ class CoursesPage(QDialog):
         current_courses = set()
         for enrollment in enrollments_data:
             if enrollment["student_id"] == self.user_id:
-                completed_courses.update(enrollment.get("completed_courses", []))
-                current_courses.update(enrollment.get("current_courses", []))
+                completed_courses.update(map(int, enrollment.get("completed_courses", [])))
+                current_courses.update(map(int, enrollment.get("current_courses", [])))
 
         try:
             with open("courses.csv", "r") as file:
@@ -213,6 +216,21 @@ class CoursesPage(QDialog):
             self.show_error_message("Error parsing courses.csv file")
             return
 
+        # Create a mapping from course code to course ID
+        course_code_to_id = {course['course_code']: int(course['course_id']) for course in courses}
+
+        # Build the prerequisite graph
+        prerequisite_graph = defaultdict(list)
+        in_degree = defaultdict(int)
+        for course in courses:
+            course_id = int(course['course_id'])
+            prerequisite_code = course["prerequisite"]
+            if prerequisite_code:
+                prerequisite_id = course_code_to_id.get(prerequisite_code)
+                if prerequisite_id:
+                    prerequisite_graph[prerequisite_id].append(course_id)
+                    in_degree[course_id] += 1
+
         layout = self.findChild(QVBoxLayout, "verticalLayout")
 
         for course in courses:
@@ -223,37 +241,36 @@ class CoursesPage(QDialog):
             course_layout.addWidget(course_label)
 
             course_details = [
-                f"Section: {course['section']} | Session: {course['session']} | Subtype: {course['subtype']}",
-                f"Type: {course['type']} | Duration: {course['duration']}",
-                f"Credits: {course['credits']} | Credit Type: {course['credit_type']}",
-                f"Time: {course['time']} | Days: {course['days']}",
-                f"Location: {course['location']}",
-                f"Instructor: {course['instructor']}"
+                f"Section: {course['section']} | Session: {course['session']} | Subj: {course.get('subject', 'N/A')} | Units: {course['credits']}",
+                f"Instructor: {course['instructor']} | Time: {course['time']} | Days: {course['days']}",
+                f"Location: {course['location']} | Prerequisite: {course['prerequisite']}"
             ]
-
             for detail in course_details:
                 detail_label = QLabel(detail)
                 detail_label.setStyleSheet("color: white;")
                 course_layout.addWidget(detail_label)
 
-            add_button = QPushButton("Add")
-            add_button.setEnabled(True)
-            add_button.setStyleSheet("background-color: green; color: white;")
+            add_button = QPushButton("Add Course")
+            course_id = int(course["course_id"])
 
-            course_id = int(course['course_id'])
             if course_id in completed_courses:
                 add_button.setEnabled(False)
                 add_button.setText("Completed")
                 add_button.setStyleSheet("background-color: blue; color: white;")
             elif course_id in current_courses:
                 add_button.setEnabled(False)
-                add_button.setText("Currently Enrolled")
+                add_button.setText("Already Registered")
                 add_button.setStyleSheet("background-color: grey; color: white;")
             else:
-                add_button.clicked.connect(lambda _, cid=course_id, prereq=course["prerequisite"]: self.add_course(cid, prereq))
+                prerequisite_code = course["prerequisite"]
+                prerequisite_id = course_code_to_id.get(prerequisite_code)
+                add_button.setStyleSheet("background-color: green; color: white;")
+                add_button.clicked.connect(
+                    lambda _, cid=course_id, prereq=prerequisite_id, c_time=course['time'], c_days=course['days']:
+                    self.add_course(cid, prereq, c_time, c_days, prerequisite_graph, completed_courses, current_courses, in_degree)
+                )
 
             course_layout.addWidget(add_button)
-
             layout.addWidget(course_widget)
             course_widget.setLayout(course_layout)
 
@@ -262,32 +279,104 @@ class CoursesPage(QDialog):
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def add_course(self, course_id, prerequisite):
+    def add_course(self, course_id, prerequisite_id, course_time, course_days, prerequisite_graph, completed_courses, current_courses, in_degree):
+        if prerequisite_id and prerequisite_id not in completed_courses:
+            QMessageBox.warning(self, "Add Course", "Prerequisite course not met. You cannot add this course.")
+            return
+
+        # Perform topological sort using Kahn's Algorithm
+        topo_order = []
+        zero_in_degree_queue = deque([course for course in prerequisite_graph if in_degree[course] == 0])
+
+        while zero_in_degree_queue:
+            current_course = zero_in_degree_queue.popleft()
+            topo_order.append(current_course)
+            for neighbor in prerequisite_graph[current_course]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    zero_in_degree_queue.append(neighbor)
+
+        # Check if adding the course respects the topological order
+        if course_id not in topo_order:
+            QMessageBox.warning(self, "Add Course", "Adding this course violates the prerequisite structure.")
+            return
+
+        # Check for time conflicts with current courses
+        if self.has_time_conflict(current_courses, course_time, course_days):
+            QMessageBox.warning(self, "Add Course", "Time conflict detected. You cannot enroll in this course.")
+            return
+
         try:
             with open("enrollments.json", "r") as file:
                 enrollments_data = json.load(file)
         except FileNotFoundError:
-            enrollments_data = {"users": []}
+            self.show_error_message("enrollments.json file not found")
+            return
         except json.JSONDecodeError:
             self.show_error_message("Error parsing enrollments.json file")
             return
 
         for user in enrollments_data["users"]:
             if user["student_id"] == self.user_id:
-                if prerequisite and prerequisite not in user.get("completed_courses", []):
-                    QMessageBox.warning(self, "Add Course", f"Prerequisite {prerequisite} not met. You cannot add this course.")
-                    return
-                if course_id not in user.get("current_courses", []):
+                if course_id not in user["current_courses"]:
                     user["current_courses"].append(course_id)
                     QMessageBox.information(self, "Add Course", f"Course {course_id} added to your schedule")
                 else:
-                    QMessageBox.warning(self, "Add Course", f"Course {course_id} is already in your current schedule")
+                    QMessageBox.warning(self, "Add Course", f"Course {course_id} is already in your schedule")
 
         with open("enrollments.json", "w") as file:
             json.dump(enrollments_data, file, indent=4)
 
         # Refresh the page to update the course status
         self.load_courses()
+
+    def has_time_conflict(self, current_courses, new_course_time, new_course_days):
+        try:
+            with open("courses.csv", "r") as file:
+                reader = csv.DictReader(file)
+                courses = {int(course['course_id']): course for course in reader}
+        except FileNotFoundError:
+            self.show_error_message("courses.csv file not found")
+            return False
+        except csv.Error:
+            self.show_error_message("Error parsing courses.csv file")
+            return False
+
+        new_time_slots = self.get_time_slots(new_course_time)
+        new_day_indices = self.get_day_indices(new_course_days)
+
+        for course_id in current_courses:
+            course = courses.get(course_id)
+            if course:
+                current_time_slots = self.get_time_slots(course['time'])
+                current_day_indices = self.get_day_indices(course['days'])
+
+                # Check if any time slots overlap
+                if set(new_time_slots).intersection(current_time_slots) and set(new_day_indices).intersection(current_day_indices):
+                    return True
+
+        return False
+
+    def get_time_slots(self, time_str):
+        time_mapping = {
+            "MWF 9-11 AM": [0, 1, 2],
+            "MWF 9-10 AM": [0, 1],
+            "MWF 11-12 AM": [2, 3],
+            "TT 2-3:30 PM": [4, 5],
+        }
+        return time_mapping.get(time_str, [])
+
+    def get_day_indices(self, day_str):
+        day_mapping = {
+            "M": [0],
+            "T": [1],
+            "W": [2],
+            "R": [3],
+            "F": [4],
+            "MWF": [0, 2, 4],
+            "TT": [1, 3],
+        }
+        return day_mapping.get(day_str, [])
 
     def show_error_message(self, message):
         msg = QMessageBox()
@@ -301,16 +390,22 @@ class CoursesPage(QDialog):
         widget.addWidget(dashboard)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def search_courses(self):
-        search_query = self.findChild(QLineEdit, "searchLineEdit").text()
-        self.load_courses(search_query)
+
 
 class CreateAcc(QDialog):
     def __init__(self):
         super(CreateAcc, self).__init__()
         loadUi("createacc.ui", self)
+
+        # Connect the buttons to their respective functions
         self.signupbutton.clicked.connect(self.createaccfunction)
-        self.backtologinbutton.clicked.connect(self.backto_login)
+
+        # Use findChild to safely get the backtologinbutton if it exists
+        self.backtologinbutton = self.findChild(QPushButton, "backtologinbutton")
+        if self.backtologinbutton:
+            self.backtologinbutton.clicked.connect(self.backto_login)
+        else:
+            print("Error: backtologinbutton not found in createacc.ui")
 
     def createaccfunction(self):
         email = self.email.text()
@@ -358,6 +453,7 @@ class CreateAcc(QDialog):
         login = Login()
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
 
 app = QApplication(sys.argv)
 widget = QStackedWidget()

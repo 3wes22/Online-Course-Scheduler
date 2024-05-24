@@ -157,7 +157,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="backButton">
+  <widget class="QPushButton" name="backtologinbutton">
    <property name="geometry">
     <rect>
      <x>360</x>

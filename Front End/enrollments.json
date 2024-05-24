@@ -52,6 +52,11 @@
             "student_id": 12,
             "completed_courses": [],
             "current_courses": []
+        },
+        {
+            "student_id": 13,
+            "completed_courses": [],
+            "current_courses": []
         }
     ]
 }
