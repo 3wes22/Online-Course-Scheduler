@@ -80,7 +80,7 @@ class SchedulePage(QDialog):
         registered_courses = set()
         for enrollment in enrollments_data:
             if enrollment["student_id"] == self.user_id:
-                registered_courses.update(enrollment["course_ids"])
+                registered_courses.update(enrollment.get("current_courses", []))
 
         try:
             with open("courses.csv", "r") as file:
@@ -138,6 +138,7 @@ class SchedulePage(QDialog):
         msg.setWindowTitle("Error")
         msg.exec_()
 
+
 class Dashboard(QDialog):
     def __init__(self, user_id):
         super(Dashboard, self).__init__()
@@ -161,6 +162,7 @@ class Dashboard(QDialog):
         login_page = Login()
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
 
 class CoursesPage(QDialog):
     def __init__(self, user_id):
@@ -200,6 +202,9 @@ class CoursesPage(QDialog):
             self.show_error_message("Error parsing courses.csv file")
             return
 
+        # Create a mapping from course code to course ID
+        course_code_to_id = {course['course_code']: int(course['course_id']) for course in courses}
+
         layout = self.findChild(QVBoxLayout, "verticalLayout")
 
         for course in courses:
@@ -233,7 +238,9 @@ class CoursesPage(QDialog):
                 add_button.setText("Already Registered")
                 add_button.setStyleSheet("background-color: grey; color: white;")
             else:
-                add_button.clicked.connect(lambda _, cid=course["course_id"], prereq=course["prerequisite"]: self.add_course(int(cid), prereq))
+                prerequisite_code = course["prerequisite"]
+                prerequisite_id = course_code_to_id.get(prerequisite_code)
+                add_button.clicked.connect(lambda _, cid=course_id, prereq=prerequisite_id: self.add_course(cid, prereq))
 
             course_layout.addWidget(add_button)
 
@@ -245,7 +252,7 @@ class CoursesPage(QDialog):
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def add_course(self, course_id, prerequisite):
+    def add_course(self, course_id, prerequisite_id):
         try:
             with open("enrollments.json", "r") as file:
                 enrollments_data = json.load(file)
@@ -257,11 +264,11 @@ class CoursesPage(QDialog):
 
         for user in enrollments_data["users"]:
             if user["student_id"] == self.user_id:
-                completed_courses = map(int, user.get("completed_courses", []))
+                completed_courses = list(map(int, user.get("completed_courses", [])))
                 current_courses = user.get("current_courses", [])
 
-                if prerequisite and int(prerequisite) not in completed_courses:
-                    QMessageBox.warning(self, "Add Course", f"Prerequisite {prerequisite} not met. You cannot add this course.")
+                if prerequisite_id and prerequisite_id not in completed_courses:
+                    QMessageBox.warning(self, "Add Course", f"Prerequisite course not met. You cannot add this course.")
                     return
                 if course_id not in current_courses:
                     user["current_courses"].append(course_id)
@@ -289,61 +296,50 @@ class CoursesPage(QDialog):
 
 
 
-class CreateAcc(QDialog):
-    def __init__(self):
-        super(CreateAcc, self).__init__()
-        loadUi("createacc.ui", self)
-        self.signupbutton.clicked.connect(self.createaccfunction)
-        self.backButton.clicked.connect(self.goto_login)
-        self.password.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.confirmpass.setEchoMode(QtWidgets.QLineEdit.Password)
 
-    def createaccfunction(self):
-        email = self.email.text()
-        password = self.password.text()
-        confirm_password = self.confirmpass.text()
 
-        if password != confirm_password:
-            self.status_label.setText("Enter the same password in confirmation field")
+def createaccfunction(self):
+    email = self.email.text()
+    password = self.password.text()
+    confirm_password = self.confirmpass.text()
+
+    if password != confirm_password:
+        self.status_label.setText("Enter the same password in confirmation field")
+        return
+
+    try:
+        with open("users.json", "r") as file:
+            users_data = json.load(file)
+    except FileNotFoundError:
+        users_data = {"users": []}
+
+    for user in users_data["users"]:
+        if user["email"] == email:
+            self.status_label.setText("User is already taken")
             return
 
-        try:
-            with open("users.json", "r") as file:
-                users_data = json.load(file)
-        except FileNotFoundError:
-            users_data = {"users": []}
+    new_id = max((user["id"] for user in users_data["users"]), default=0) + 1
+    users_data["users"].append({"id": new_id, "email": email, "password": password})
 
-        for user in users_data["users"]:
-            if user["email"] == email:
-                self.status_label.setText("User is already taken")
-                return
+    with open("users.json", "w") as file:
+        json.dump(users_data, file, indent=4)
 
-        new_id = max((user["id"] for user in users_data["users"]), default=0) + 1
-        users_data["users"].append({"id": new_id, "email": email, "password": password})
+    try:
+        with open("enrollments.json", "r") as file:
+            enrollments_data = json.load(file)
+    except FileNotFoundError:
+        enrollments_data = {"users": []}
 
-        with open("users.json", "w") as file:
-            json.dump(users_data, file, indent=4)
+    enrollments_data["users"].append({"student_id": new_id, "completed_courses": [], "current_courses": []})
 
-        try:
-            with open("enrollments.json", "r") as file:
-                enrollments_data = json.load(file)
-        except FileNotFoundError:
-            enrollments_data = {"users": []}
+    with open("enrollments.json", "w") as file:
+        json.dump(enrollments_data, file, indent=4)
 
-        enrollments_data["users"].append({"student_id": new_id, "course_ids": []})
+    self.status_label.setText(f"Successfully created account with email: {email}")
+    login = Login()
+    widget.addWidget(login)
+    widget.setCurrentIndex(widget.currentIndex() + 1)
 
-        with open("enrollments.json", "w") as file:
-            json.dump(enrollments_data, file, indent=4)
-
-        self.status_label.setText(f"Successfully created account with email: {email}")
-        login = Login()
-        widget.addWidget(login)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
-    def goto_login(self):
-        login_page = Login()
-        widget.addWidget(login_page)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 app = QApplication(sys.argv)
