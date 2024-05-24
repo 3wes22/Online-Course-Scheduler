@@ -65,6 +65,7 @@ class SchedulePage(QDialog):
         loadUi("schedule.ui", self)
         self.load_schedule()
         self.logoutButton.clicked.connect(self.logout)
+        self.backButton.clicked.connect(self.goto_dashboard)
 
     def load_schedule(self):
         try:
@@ -131,12 +132,18 @@ class SchedulePage(QDialog):
         widget.addWidget(login_page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+    def goto_dashboard(self):
+        dashboard = Dashboard(self.user_id)
+        widget.addWidget(dashboard)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def show_error_message(self, message):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
         msg.setText(message)
         msg.setWindowTitle("Error")
         msg.exec_()
+
 
 
 class Dashboard(QDialog):
