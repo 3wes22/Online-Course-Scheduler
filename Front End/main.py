@@ -108,22 +108,28 @@ class SchedulePage(QDialog):
 
     def get_time_slots(self, time_str):
         time_mapping = {
-            "MWF 9-11 AM": [2, 3, 4],
-            "MWF 9-10 AM": [2, 3],
-            "MWF 11-12 AM": [4, 5],
-            "TT 2-3:30 PM": [7, 8],
+            "MWF 9-10 AM": [0],    # Representing the first time slot, index 0
+            "MWF 10-11 AM": [1],
+            "MWF 11-12 AM": [2],
+            "MWF 1-2 PM": [3],
+            "MWF 2-3 PM": [4],
+            "TT 9-10:30 AM": [5],
+            "TT 10:30-12 PM": [6],
+            "TT 1-2:30 PM": [7],
+            "TT 2:30-4 PM": [8],
+            "TT 4-5:30 PM": [9],
         }
         return time_mapping.get(time_str, [])
 
     def get_day_indices(self, day_str):
         day_mapping = {
-            "M": [1],
-            "T": [2],
-            "W": [3],
-            "R": [4],
-            "F": [5],
-            "MWF": [1, 3, 5],
-            "TT": [2, 4],
+            "M": [0],  # Representing Monday, index 0
+            "T": [1],  # Representing Tuesday, index 1
+            "W": [2],  # Representing Wednesday, index 2
+            "R": [3],  # Representing Thursday, index 3
+            "F": [4],  # Representing Friday, index 4
+            "MWF": [0, 2, 4],  # Representing Monday, Wednesday, and Friday
+            "TT": [1, 3],  # Representing Tuesday and Thursday
         }
         return day_mapping.get(day_str, [])
 
@@ -143,6 +149,7 @@ class SchedulePage(QDialog):
         msg.setText(message)
         msg.setWindowTitle("Error")
         msg.exec_()
+
 
 class Dashboard(QDialog):
     def __init__(self, user_id):
@@ -192,8 +199,8 @@ class CoursesPage(QDialog):
         current_courses = set()
         for enrollment in enrollments_data:
             if enrollment["student_id"] == self.user_id:
-                completed_courses.update(map(int, enrollment.get("completed_courses", [])))
-                current_courses.update(map(int, enrollment.get("current_courses", [])))
+                completed_courses.update(enrollment.get("completed_courses", []))
+                current_courses.update(enrollment.get("current_courses", []))
 
         try:
             with open("courses.csv", "r") as file:
@@ -267,7 +274,7 @@ class CoursesPage(QDialog):
 
         for user in enrollments_data["users"]:
             if user["student_id"] == self.user_id:
-                if prerequisite and int(prerequisite) not in user.get("completed_courses", []):
+                if prerequisite and prerequisite not in user.get("completed_courses", []):
                     QMessageBox.warning(self, "Add Course", f"Prerequisite {prerequisite} not met. You cannot add this course.")
                     return
                 if course_id not in user.get("current_courses", []):
@@ -294,15 +301,16 @@ class CoursesPage(QDialog):
         widget.addWidget(dashboard)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+    def search_courses(self):
+        search_query = self.findChild(QLineEdit, "searchLineEdit").text()
+        self.load_courses(search_query)
 
 class CreateAcc(QDialog):
     def __init__(self):
         super(CreateAcc, self).__init__()
         loadUi("createacc.ui", self)
         self.signupbutton.clicked.connect(self.createaccfunction)
-        self.backButton.clicked.connect(self.goto_login)
-        self.password.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.confirmpass.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.backtologinbutton.clicked.connect(self.backto_login)
 
     def createaccfunction(self):
         email = self.email.text()
@@ -336,7 +344,7 @@ class CreateAcc(QDialog):
         except FileNotFoundError:
             enrollments_data = {"users": []}
 
-        enrollments_data["users"].append({"student_id": new_id, "course_ids": []})
+        enrollments_data["users"].append({"student_id": new_id, "completed_courses": [], "current_courses": []})
 
         with open("enrollments.json", "w") as file:
             json.dump(enrollments_data, file, indent=4)
@@ -346,11 +354,10 @@ class CreateAcc(QDialog):
         widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def goto_login(self):
-        login_page = Login()
-        widget.addWidget(login_page)
+    def backto_login(self):
+        login = Login()
+        widget.addWidget(login)
         widget.setCurrentIndex(widget.currentIndex() + 1)
-
 
 app = QApplication(sys.argv)
 widget = QStackedWidget()

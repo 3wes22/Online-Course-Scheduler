@@ -19,10 +19,10 @@
   <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>50</y>
+     <x>0</x>
+     <y>90</y>
      <width>440</width>
-     <height>580</height>
+     <height>411</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -34,17 +34,46 @@
       <x>0</x>
       <y>0</y>
       <width>438</width>
-      <height>578</height>
+      <height>409</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
   </widget>
+  <widget class="QLineEdit" name="searchLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>60</y>
+     <width>300</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:14pt; color:rgb(0, 0, 0); background-color: rgb(255, 255, 255);</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="searchButton">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>60</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(167, 168, 167); font-size:14pt; color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Search</string>
+   </property>
+  </widget>
   <widget class="QPushButton" name="logoutButton">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>10</y>
+     <x>320</x>
+     <y>0</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -59,8 +88,8 @@
   <widget class="QPushButton" name="backButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>0</x>
+     <y>0</y>
      <width>121</width>
      <height>41</height>
     </rect>
